@@ -39,7 +39,42 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 
 
+HestonPrice=pd.read_csv('C:/Users/KUMAR YASHASWI/Documents/RLPortfolio/PortfolioOptimization/Datasets/AAPL.csv')
+HestonPrice['Date'] = pd.to_datetime(HestonPrice['Date'])
+HestonPrice=HestonPrice[['Date','Close']]
+kf=klfilter(HestonPrice)
+data=HestonPrice.copy()
 
+a=HestonPrice['Date'][25:]
+plt.figure(figsize = (15, 4))   
+#plt.plot(UKF_prices_test)
+#plt.plot(real_prices_test)
+#plt.plot(a,real_prices_test,label="RL Portfolio-Return")
+plt.plot(a,HestonPrice['Close'][25:].pct_change(),linestyle='-',label="Original Stock Returns",color='red')
+plt.plot(a,data['Close'][25:].pct_change(),linestyle='-',label="Filtered Returns",color='blue')
+#plt.plot(label="PCRLB")
+plt.legend(loc="upper left")
+plt.xlabel('Date',fontsize=15)
+plt.ylabel('Stock Returns',fontsize=15)
+plt.title("Returns Chart",fontsize=15)
+plt.grid()
+plt.show() 
+
+HestonPrice['Close'].pct_change()
+
+a=HestonPrice['Date'][25:]
+plt.figure(figsize = (15, 4))   
+#plt.plot(UKF_prices_test)
+#plt.plot(real_prices_test)
+#plt.plot(a,real_prices_test,label="RL Portfolio-Return")
+plt.plot(a,HestonPrice['Close'][25:],linestyle='-',label="PCRLB",color='blue')
+#plt.plot(label="PCRLB")
+#plt.legend(loc="upper left")
+plt.xlabel('Date',fontsize=15)
+plt.ylabel('Original Stock Price',fontsize=15)
+plt.title("Price Chart",fontsize=15)
+plt.grid()
+plt.show()  
 def klfilter(data):
         
     
@@ -49,7 +84,7 @@ def klfilter(data):
                           initial_state_covariance = 1,
                           observation_covariance=1,
                           transition_covariance=.01)
-        
+   col='Close'     
     # Use the observed values of the price to get a rolling mean
         for col in data.columns:
             x=data[col]
@@ -64,8 +99,10 @@ def klfilter(data):
             #plt.plot(state_means)
  
            
-        return data     
-'''   
+        return data    
+    
+
+    
 def RL_klfilter(data):
         
     
@@ -84,7 +121,7 @@ def RL_klfilter(data):
         
         return pd.Series(state_means)
     
-'''
+
  
 def RL_klfilter(data):
         
